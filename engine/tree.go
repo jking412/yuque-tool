@@ -29,34 +29,23 @@ func (t *Tree) Parse() error {
 }
 
 func (t *Tree) parse() {
-	t.Root = &ListNode{
-		NodeType: NodeText,
-		Pos:      Pos(0),
-		tr:       t,
-	}
+	t.Root = t.newList(t.peek().pos)
 	for t.peek().typ != itemEOF {
 		switch t.peek().typ {
 		case itemText:
-			textNode := &TextNode{
-				NodeType: NodeText,
-				Pos:      t.peek().pos,
-				tr:       t,
-				Text:     []byte(t.peek().val),
-			}
+			textNode := t.newText(t.peek().pos, t.peek().val)
 			t.Root.Nodes = append(t.Root.Nodes, textNode)
 			t.next()
 		case itemTable:
-			tableNode := &TableNode{
-				NodeType: NodeTable,
-				Pos:      t.peek().pos,
-				tr:       t,
-				Fields:   make([]*TableFieldNode, 0),
-			}
+			tableNode := t.newTable(t.peek().pos)
 			t.Root.Nodes = append(t.Root.Nodes, tableNode)
 			t.next()
 			t.parseKeyWord()
 			tableNode.Name = t.nextTrimSpace().val
 			t.parseTable(tableNode)
+		default:
+			// 跳过不被处理的 item，如 itemSpace
+			t.next()
 		}
 	}
 }
@@ -65,11 +54,7 @@ func (t *Tree) parseTable(node *TableNode) {
 	for t.peek().typ != itemEOF {
 		switch t.peek().typ {
 		case itemTableField:
-			tableFieldNode := &TableFieldNode{
-				NodeType: NodeTableField,
-				Pos:      t.peek().pos,
-				tr:       t,
-			}
+			tableFieldNode := t.newTableField(t.peek().pos)
 			t.next()
 			tableFieldNode.Val = t.nextTrimSpace().val
 			node.Fields = append(node.Fields, tableFieldNode)
@@ -108,9 +93,7 @@ func (t *Tree) next() item {
 
 func (t *Tree) nextTrimSpace() item {
 	token := t.next()
-	for _, c := range spaceChars {
-		token.val = strings.ReplaceAll(token.val, string(c), "")
-	}
+	token.val = strings.TrimSpace(token.val)
 	return token
 }
 
