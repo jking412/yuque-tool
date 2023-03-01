@@ -62,12 +62,11 @@ type TableNode struct {
 	Repeated bool
 }
 
-func (t *Tree) newTable(pos Pos, name string) *TableNode {
+func (t *Tree) newTable(pos Pos) *TableNode {
 	return &TableNode{
 		NodeType: NodeTable,
 		Pos:      pos,
 		tr:       t,
-		Name:     name,
 		Repeated: false,
 		Fields:   make([]*TableFieldNode, 0),
 	}
@@ -96,12 +95,11 @@ type TableFieldNode struct {
 	Val string
 }
 
-func (t *Tree) newTableField(pos Pos, val string) *TableFieldNode {
+func (t *Tree) newTableField(pos Pos) *TableFieldNode {
 	return &TableFieldNode{
 		NodeType: NodeTableField,
 		Pos:      pos,
 		tr:       t,
-		Val:      val,
 	}
 }
 
