@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
 )
+
+// bfs
 
 func main() {
 	u := &User{
@@ -11,5 +14,5 @@ func main() {
 		UserAgent: userAgent,
 	}
 	u.Get("/repos/skynesser/cpcmrw/docs/pk27c68itt0471gi")
-
+	fmt.Println("hel")
 }

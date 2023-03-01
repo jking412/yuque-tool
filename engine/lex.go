@@ -131,9 +131,7 @@ func (l *lexer) nextItem() item {
 // 获取下一个Item并删除Item两侧的itemSpace
 func (l *lexer) nextItemTrimSpace() item {
 	i := <-l.items
-	for _, space := range spaceChars {
-		strings.ReplaceAll(i.val, string(space), "")
-	}
+	i.val = strings.TrimSpace(i.val)
 	return i
 }
 
