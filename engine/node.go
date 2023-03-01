@@ -25,10 +25,10 @@ type TextNode struct {
 	NodeType
 	Pos
 	tr   *Tree
-	Text []byte
+	Text string
 }
 
-func (t *Tree) newText(pos Pos, text []byte) *TextNode {
+func (t *Tree) newText(pos Pos, text string) *TextNode {
 	return &TextNode{
 		NodeType: NodeText,
 		Pos:      pos,
