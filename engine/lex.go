@@ -151,6 +151,9 @@ func lexText(l *lexer) stateFn {
 		switch r := l.peek(); {
 		case r == eof:
 			if l.pos > l.start {
+				if strings.TrimSpace(l.input[l.start:l.pos]) == "" {
+					l.emit(itemSpace)
+				}
 				l.emit(itemText)
 			}
 			l.ignore()
@@ -158,6 +161,9 @@ func lexText(l *lexer) stateFn {
 			return nil
 		case strings.ContainsRune(keyWord, r):
 			if l.pos > l.start {
+				if strings.TrimSpace(l.input[l.start:l.pos]) == "" {
+					l.emit(itemSpace)
+				}
 				l.emit(itemText)
 			}
 			l.ignore()
